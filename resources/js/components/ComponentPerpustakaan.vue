@@ -7,7 +7,7 @@
     </header>
     <h1 class="text-4xl font-semibold text-center my-4">Database Perpustakaan</h1>
     <div class="flex flex-col justify-center">
-        <div class="container bg-white py-4 rounded-xl">
+        <div class="container bg-white py-4 rounded-xl shadow-md">
             <!-- Tab Navigation -->
             <ul class="nav nav-pills justify-content-center mb-4">
                 <li class="nav-item">
