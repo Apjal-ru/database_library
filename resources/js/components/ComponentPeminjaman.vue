@@ -9,6 +9,8 @@
     <div class="flex flex-col justify-center">
         <div class="container p-4 bg-white py-4 rounded-xl shadow-md">
                 <form-peminjaman @form-submitted="addPeminjaman" />
+        </div>
+        <div class="container p-4 bg-white py-4 rounded-xl shadow-md my-4">
                 <table-peminjaman :peminjamanList="peminjamanList" />
         </div>
     </div>
@@ -21,7 +23,7 @@ import TabelPinjaman from './TabelPinjaman.vue';
 export default {
     components: {
         FormPeminjaman,
-        TabelPinjaman
+        TabelPinjaman,
     },
     data() {
         return {
