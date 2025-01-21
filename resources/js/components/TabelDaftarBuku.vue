@@ -17,7 +17,7 @@
                 <tr v-for="(book, index) in books" :key="book.id">
                     <td>{{ index + 1 }}</td>
                     <td>{{ book.stock }}</td>
-                    <td>{{ book.available }}</td>
+                    <td>{{ book.available_stock }}</td>
                     <td>{{ book.title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{{ book.publisher }}</td>
@@ -27,6 +27,9 @@
                         <button class="btn btn-danger btn-sm" @click="$emit('delete-book', book.id)">Hapus</button>
                     </td>
                 </tr>
+                <tr v-if="books.length === 0">
+                    <td colspan="8" class="text-center">Tidak ada data buku</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -35,7 +38,11 @@
 <script>
 export default {
     props: {
-        books: Array,
-    },
+        books: {
+            type: Array,
+            required: true,
+            default: () => []
+        }
+    }
 };
 </script>

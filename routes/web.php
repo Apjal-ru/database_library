@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,6 +21,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/index', function () {
     return view('index');
 })->middleware(['auth', 'role:admin']);
+
+Route::post('/books', [BookController::class, 'store'])->middleware('auth');
 
 // User route
 Route::get('/peminjaman', function () {

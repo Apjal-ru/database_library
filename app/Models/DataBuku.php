@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class DataBuku extends Model
 {
+    public $timestamps = false;
     protected $table = 'data_buku';
     protected $fillable = [
         'stock',
+        'available_stock',
         'title',
         'author',
         'publisher',

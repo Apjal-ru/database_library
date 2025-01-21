@@ -64,13 +64,82 @@ export default {
             },
         };
     },
+    async created() {
+        await this.fetchBooks();
+    },
     methods: {
-        addOrUpdateBook() {
-            if (this.bookForm.id) {
-                // Update book logic
-            } else {
-                // Add book logic
+        async fetchBooks() {
+            try {
+                const response = await fetch('/api/books', {
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrf
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch books');
+                }
+
+                const data = await response.json();
+                this.books = data.books;
+            } catch (error) {
+                console.error('Error fetching books:', error);
+
             }
+        },
+        async addOrUpdateBook() {
+            try {
+                if (this.bookForm.id) {
+                    // Update logic akan ditambahkan nanti
+                } else {
+                    const response = await fetch('/books', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': this.csrf
+                        },
+                        body: JSON.stringify({
+                            stock: parseInt(this.bookForm.amount),
+                            title: this.bookForm.title,
+                            author: this.bookForm.author,
+                            publisher: this.bookForm.publisher,
+                            year: parseInt(this.bookForm.year)
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Tambahkan buku baru ke array books
+                        this.books.push(data.book);
+                        // Reset form
+                        this.bookForm = {
+                            id: null,
+                            amount: '',
+                            title: '',
+                            author: '',
+                            publisher: '',
+                            year: ''
+                        };
+                        // Tutup modal
+                        const modal = document.getElementById('addBookModal');
+                        const modalInstance = bootstrap.Modal.getInstance(modal);
+                        modalInstance.hide();
+                        // Tampilkan pesan sukses
+                        alert('Buku berhasil ditambahkan');
+                    } else {
+                        throw new Error(data.message);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Gagal menambahkan buku: ' + error.message);
+            }
+        },
+        closeModal() {
+        const modal = document.getElementById('addBookModal');
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        modalInstance.hide();
         },
         editBook(book) {
             this.bookForm = { ...book };
