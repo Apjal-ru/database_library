@@ -28,6 +28,7 @@
                                 :class="{ 'is-invalid': errors.title }"
                                 id="title"
                                 v-model="bookForm.title"
+                                @input="validateAlphabet($event, 'title')"
                             >
                             <div class="invalid-feedback">{{ errors.title }}</div>
                         </div>
@@ -38,6 +39,7 @@
                                 :class="{ 'is-invalid': errors.author }"
                                 id="author"
                                 v-model="bookForm.author"
+                                @input="validateAlphabet($event, 'author')"
                             >
                             <div class="invalid-feedback">{{ errors.author }}</div>
                         </div>
@@ -48,6 +50,7 @@
                                 :class="{ 'is-invalid': errors.publisher }"
                                 id="publisher"
                                 v-model="bookForm.publisher"
+                                @input="validateAlphabet($event, 'publisher')"
                             >
                             <div class="invalid-feedback">{{ errors.publisher }}</div>
                         </div>
@@ -111,6 +114,17 @@ export default {
                     this.errors.year = `Tahun tidak boleh melebihi ${currentYear}`;
                     return;
                 }
+            }
+
+            this.errors[field] = '';
+        },
+        validateAlphabet(event, field) {
+            // Hanya mengizinkan input huruf
+            const value = event.target.value;
+            if (!/^[a-zA-Z\s]*$/.test(value)) {
+                this.errors[field] = 'Hanya boleh diisi huruf';
+                this.bookForm[field] = value.replace(/[^a-zA-Z\s]/g, '');
+                return;
             }
 
             this.errors[field] = '';
