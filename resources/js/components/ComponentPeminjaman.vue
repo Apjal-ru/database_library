@@ -29,6 +29,7 @@ export default {
         return {
             csrf: document.querySelector('meta[name="csrf-token"]').content,
             peminjamanList: []
+
         };
     },
     methods: {

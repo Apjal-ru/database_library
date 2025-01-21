@@ -14,14 +14,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in peminjamanList" :key="item.id">
+                <tr v-for="(loan, index) in peminjamanList" :key="loan.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.nama_peminjam }}</td>
-                    <td>{{ item.judul_buku }}</td>
-                    <td>{{ item.penerbit_buku }}</td>
-                    <td>{{ item.jumlah }}</td>
-                    <td>{{ item.terbit }}</td>
-                    <td>{{ item.tanggal_peminjaman }}</td>
+                    <td>{{ loan.nama_peminjam }}</td>
+                    <td>{{ loan.judul_buku }}</td>
+                    <td>{{ loan.penerbit_buku }}</td>
+                    <td>{{ loan.jumlah }}</td>
+                    <td>{{ loan.terbit }}</td>
+                    <td>{{ loan.tanggal_peminjaman }}</td>
                 </tr>
             </tbody>
         </table>

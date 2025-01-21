@@ -89,63 +89,121 @@ export default {
         },
         async addOrUpdateBook() {
             try {
+                const formData = {
+                    stock: parseInt(this.bookForm.amount),
+                    title: this.bookForm.title,
+                    author: this.bookForm.author,
+                    publisher: this.bookForm.publisher,
+                    year: parseInt(this.bookForm.year)
+                };
+
+                let response;
                 if (this.bookForm.id) {
-                    // Update logic akan ditambahkan nanti
+                    // Update existing book
+                    response = await fetch(`/books/${this.bookForm.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': this.csrf
+                        },
+                        body: JSON.stringify(formData)
+                    });
                 } else {
-                    const response = await fetch('/books', {
+                    // Create new book
+                    response = await fetch('/books', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': this.csrf
                         },
-                        body: JSON.stringify({
-                            stock: parseInt(this.bookForm.amount),
-                            title: this.bookForm.title,
-                            author: this.bookForm.author,
-                            publisher: this.bookForm.publisher,
-                            year: parseInt(this.bookForm.year)
-                        })
+                        body: JSON.stringify(formData)
                     });
+                }
 
-                    const data = await response.json();
+                const data = await response.json();
 
-                    if (response.ok) {
-                        // Tambahkan buku baru ke array books
-                        this.books.push(data.book);
-                        // Reset form
-                        this.bookForm = {
-                            id: null,
-                            amount: '',
-                            title: '',
-                            author: '',
-                            publisher: '',
-                            year: ''
-                        };
-                        // Tutup modal
-                        const modal = document.getElementById('addBookModal');
-                        const modalInstance = bootstrap.Modal.getInstance(modal);
-                        modalInstance.hide();
-                        // Tampilkan pesan sukses
-                        alert('Buku berhasil ditambahkan');
+                if (response.ok) {
+                    if (this.bookForm.id) {
+                        // Update existing book in the array
+                        const index = this.books.findIndex(book => book.id === this.bookForm.id);
+                        if (index !== -1) {
+                            this.books[index] = data.book;
+                        }
                     } else {
-                        throw new Error(data.message);
+                        // Add new book to array
+                        this.books.push(data.book);
                     }
+
+                    // Reset form and close modal
+                    this.bookForm = {
+                        id: null,
+                        amount: '',
+                        title: '',
+                        author: '',
+                        publisher: '',
+                        year: ''
+                    };
+
+                    const modal = document.getElementById('addBookModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    modalInstance.hide();
+
+                    // Show success message
+                    alert(data.message);
+                } else {
+                    throw new Error(data.message);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Gagal menambahkan buku: ' + error.message);
+                alert('Gagal menyimpan buku: ' + error.message);
             }
         },
-        closeModal() {
-        const modal = document.getElementById('addBookModal');
-        const modalInstance = bootstrap.Modal.getInstance(modal);
-        modalInstance.hide();
-        },
         editBook(book) {
-            this.bookForm = { ...book };
+            // Populate form with book data
+            this.bookForm = {
+                id: book.id,
+                amount: book.stock.toString(),
+                title: book.title,
+                author: book.author,
+                publisher: book.publisher,
+                year: book.year.toString()
+            };
+
+            // Open modal
+            const modal = new bootstrap.Modal(document.getElementById('addBookModal'));
+            modal.show();
         },
-        deleteBook(id) {
-            // Delete book logic
+        closeModal() {
+            const modal = document.getElementById('addBookModal');
+            const modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance.hide();
+        },
+        async deleteBook(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus buku ini?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/books/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrf
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Hapus buku dari array
+                    this.books = this.books.filter(book => book.id !== id);
+                    alert(data.message);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Gagal menghapus buku: ' + error.message);
+            }
         },
         deleteLoan(id) {
             // Delete loan logic

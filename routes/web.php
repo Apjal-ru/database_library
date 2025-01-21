@@ -23,6 +23,8 @@ Route::get('/index', function () {
 })->middleware(['auth', 'role:admin']);
 
 Route::post('/books', [BookController::class, 'store'])->middleware('auth');
+Route::put('/books/{id}', [BookController::class, 'update'])->middleware('auth');
+Route::delete('/books/{id}', [BookController::class, 'destroy'])->middleware('auth');
 
 // User route
 Route::get('/peminjaman', function () {

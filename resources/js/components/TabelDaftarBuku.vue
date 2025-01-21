@@ -23,7 +23,7 @@
                     <td>{{ book.publisher }}</td>
                     <td>{{ book.year }}</td>
                     <td>
-                        <button class="btn btn-warning btn-sm" @click="$emit('edit-book', book)">Edit</button>
+                        <button class="btn btn-warning btn-sm mr-2" @click="$emit('edit-book', book)">Edit</button>
                         <button class="btn btn-danger btn-sm" @click="$emit('delete-book', book.id)">Hapus</button>
                     </td>
                 </tr>
