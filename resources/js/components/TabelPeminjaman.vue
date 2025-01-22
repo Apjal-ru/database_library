@@ -14,17 +14,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(loan, index) in loans" :key="loan.id">
+                <tr v-for="(loan, index) in peminjamanList" :key="loan.id">
                     <td>{{ index + 1 }}</td>
                     <td>{{ loan.nama_peminjam }}</td>
                     <td>{{ loan.judul_buku }}</td>
                     <td>{{ loan.penerbit_buku }}</td>
                     <td>{{ loan.jumlah }}</td>
                     <td>{{ loan.terbit }}</td>
-                    <td>{{ loan.tanggal_peminjaman }}</td>
+                    <td>{{ formatDate(loan.tanggal_peminjaman) }}</td>
                     <td>
-                        <button class="btn btn-danger btn-sm" @click="$emit('delete-loan', loan.id)">Hapus</button>
+                        <button
+                            class="btn btn-danger btn-sm"
+                            @click="$emit('delete-loan', loan.id)"
+                        >
+                            Hapus
+                        </button>
                     </td>
+                </tr>
+                <tr v-if="peminjamanList.length === 0">
+                    <td colspan="8" class="text-center">Tidak ada data peminjaman</td>
                 </tr>
             </tbody>
         </table>
@@ -39,6 +47,16 @@ export default {
             type: Array,
             required: true,
             default: () => []
+        }
+    },
+    methods: {
+        formatDate(date) {
+            if (!date) return '';
+            return new Date(date).toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
         }
     }
 }

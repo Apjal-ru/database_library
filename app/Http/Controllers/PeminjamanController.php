@@ -56,4 +56,45 @@ class PeminjamanController extends Controller
             ], 500);
         }
     }
+    public function index()
+    {
+        try {
+            $peminjaman = Peminjaman::all();
+            return response()->json([
+                'loans' => $peminjaman
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching peminjaman: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Gagal mengambil data peminjaman'
+            ], 500);
+        }
+    }
+    public function destroy($id)
+    {
+        try {
+            $peminjaman = Peminjaman::findOrFail($id);
+
+            // Kembalikan stok buku
+            $buku = DataBuku::where('title', $peminjaman->judul_buku)->first();
+            if ($buku) {
+                $buku->update([
+                    'available_stock' => $buku->available_stock + $peminjaman->jumlah
+                ]);
+            }
+
+            $peminjaman->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Peminjaman berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error deleting peminjaman: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus peminjaman'
+            ], 500);
+        }
+    }
 }

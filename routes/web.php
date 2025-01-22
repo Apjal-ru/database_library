@@ -34,6 +34,8 @@ Route::get('/peminjaman', function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/api/peminjaman', [PeminjamanController::class, 'store']);
+    Route::get('/api/peminjaman', [PeminjamanController::class, 'index']);
+    Route::delete('/api/peminjaman/{id}', [PeminjamanController::class, 'destroy']);
 });
 
 Route::post('/logout', function (Request $request) {

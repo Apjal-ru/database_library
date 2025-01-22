@@ -31,7 +31,7 @@
             </div>
 
             <div v-if="activeTab === 'loans'">
-                <TabelPeminjaman :loans="loans" @delete-loan="deleteLoan" />
+                <TabelPeminjaman :peminjamanList="loans" @delete-loan="deleteLoan" />
             </div>
         </div>
     </div>
@@ -44,9 +44,10 @@ import TabelPeminjaman from './TabelPeminjaman.vue';
 
 export default {
     components: {
+        AddBookModal,
         TabelDaftarBuku,
         TabelPeminjaman,
-        AddBookModal,
+
     },
     data() {
         return {
@@ -227,29 +228,29 @@ export default {
         },
         async deleteLoan(id) {
             if (!confirm('Apakah Anda yakin ingin menghapus peminjaman ini?')) {
-            return;
-        }
+                return;
+            }
 
-        try {
-            fetch(`/api/peminjaman/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': this.csrf,
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        this.loans = this.loans.filter(loan => loan.id !== id);
-                        alert('Peminjaman berhasil dihapus');
-                    } else {
-                        throw new Error(data.message);
-                    }
-                });
-        } catch (error) {
-            console.error('Error deleting loan:', error);
-            alert('Gagal menghapus peminjaman: ' + error.message);
-        }
+            try {
+                fetch(`/api/peminjaman/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrf,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.loans = this.loans.filter(loan => loan.id !== id);
+                            alert('Peminjaman berhasil dihapus');
+                        } else {
+                            throw new Error(data.message);
+                        }
+                    });
+            } catch (error) {
+                console.error('Error deleting loan:', error);
+                alert('Gagal menghapus peminjaman: ' + error.message);
+            }
         },
         logout() {
             window.location.href = '/logout';
