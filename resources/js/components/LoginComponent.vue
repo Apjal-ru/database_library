@@ -13,7 +13,6 @@
                         class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required />
                 </div>
-
                 <!-- Password Field -->
                 <div class="mb-4">
                     <label for="loginPassword" class="block text-sm font-medium text-gray-700">Password</label>
@@ -21,8 +20,6 @@
                         class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                         required />
                 </div>
-
-                <!-- Submit Button -->
                 <div class="mb-4">
                     <button type="submit"
                         class="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300"
@@ -30,8 +27,6 @@
                         {{ loading ? 'Loading...' : 'Login' }}
                     </button>
                 </div>
-
-                <!-- Error Message -->
                 <div v-if="error" class="text-red-500 text-sm text-center mt-2">
                     {{ error }}
                 </div>

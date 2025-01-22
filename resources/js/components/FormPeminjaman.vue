@@ -4,17 +4,12 @@
         <form @submit.prevent="submitForm">
             <div class="mb-4">
                 <label for="id" class="block text-sm font-medium text-gray-700">Judul Buku</label>
-                <select
-                    id="id"
-                    v-model="form.id"
+                <select id="id" v-model="form.id"
                     class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    required
-                >
+                    required>
                     <option value="" disabled>Pilih Buku</option>
-                    <option v-for="buku in availableBooks"
-                            :key="buku.id"
-                            :value="buku.id"
-                            :disabled="buku.available_stock === 0">
+                    <option v-for="buku in availableBooks" :key="buku.id" :value="buku.id"
+                        :disabled="buku.available_stock === 0">
                         {{ `${buku.title} (${buku.year}) - ${buku.publisher}` }}
                         {{ buku.available_stock === 0 ? ' (Stok Habis)' : '' }}
                     </option>
@@ -22,25 +17,16 @@
             </div>
             <div class="mb-4">
                 <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah Pinjam</label>
-                <input
-                    type="text"
-                    id="jumlah"
-                    v-model="form.jumlah"
-                    min="1"
-                    :max="selectedBookStock"
+                <input type="text" id="jumlah" v-model="form.jumlah" min="1" :max="selectedBookStock"
                     @input="validateNumber($event, 'jumlah')"
                     class="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    required
-                />
+                    required />
                 <span v-if="selectedBookStock" class="text-sm text-gray-500">
                     Stok tersedia: {{ selectedBookStock }}
                 </span>
             </div>
-            <button
-                type="submit"
-                class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                :disabled="!isFormValid"
-            >
+            <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                :disabled="!isFormValid">
                 Pinjam
             </button>
         </form>
@@ -66,9 +52,9 @@ export default {
         },
         isFormValid() {
             return this.form.id &&
-                   this.form.jumlah &&
-                   this.form.jumlah > 0 &&
-                   this.form.jumlah <= this.selectedBookStock;
+                this.form.jumlah &&
+                this.form.jumlah > 0 &&
+                this.form.jumlah <= this.selectedBookStock;
         }
     },
     async created() {
@@ -119,12 +105,9 @@ export default {
 
                 const data = await response.json();
                 this.$emit('form-submitted', data.peminjaman);
-
-                // Reset form
                 this.form.id = '';
                 this.form.jumlah = '';
 
-                // Refresh book list to update available stock
                 await this.fetchBooks();
 
                 alert('Peminjaman berhasil');

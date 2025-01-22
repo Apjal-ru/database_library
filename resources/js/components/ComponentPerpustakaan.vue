@@ -120,7 +120,6 @@ export default {
 
                 let response;
                 if (this.bookForm.id) {
-                    // Update existing book
                     response = await fetch(`/books/${this.bookForm.id}`, {
                         method: 'PUT',
                         headers: {
@@ -130,7 +129,6 @@ export default {
                         body: JSON.stringify(formData)
                     });
                 } else {
-                    // Create new book
                     response = await fetch('/books', {
                         method: 'POST',
                         headers: {
@@ -145,17 +143,13 @@ export default {
 
                 if (response.ok) {
                     if (this.bookForm.id) {
-                        // Update existing book in the array
                         const index = this.books.findIndex(book => book.id === this.bookForm.id);
                         if (index !== -1) {
                             this.books[index] = data.book;
                         }
                     } else {
-                        // Add new book to array
                         this.books.push(data.book);
                     }
-
-                    // Reset form and close modal
                     this.bookForm = {
                         id: null,
                         amount: '',
@@ -168,8 +162,6 @@ export default {
                     const modal = document.getElementById('addBookModal');
                     const modalInstance = bootstrap.Modal.getInstance(modal);
                     modalInstance.hide();
-
-                    // Show success message
                     alert(data.message);
                 } else {
                     throw new Error(data.message);
@@ -180,7 +172,6 @@ export default {
             }
         },
         editBook(book) {
-            // Populate form with book data
             this.bookForm = {
                 id: book.id,
                 amount: book.stock.toString(),
@@ -189,8 +180,6 @@ export default {
                 publisher: book.publisher,
                 year: book.year.toString()
             };
-
-            // Open modal
             const modal = new bootstrap.Modal(document.getElementById('addBookModal'));
             modal.show();
         },
