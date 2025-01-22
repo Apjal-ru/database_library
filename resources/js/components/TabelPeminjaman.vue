@@ -16,10 +16,12 @@
             <tbody>
                 <tr v-for="(loan, index) in loans" :key="loan.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ loan.borrower }}</td>
-                    <td>{{ loan.book }}</td>
-                    <td>{{ loan.quantity }}</td>
-                    <td>{{ loan.date }}</td>
+                    <td>{{ loan.nama_peminjam }}</td>
+                    <td>{{ loan.judul_buku }}</td>
+                    <td>{{ loan.penerbit_buku }}</td>
+                    <td>{{ loan.jumlah }}</td>
+                    <td>{{ loan.terbit }}</td>
+                    <td>{{ loan.tanggal_peminjaman }}</td>
                     <td>
                         <button class="btn btn-danger btn-sm" @click="$emit('delete-loan', loan.id)">Hapus</button>
                     </td>
@@ -31,8 +33,13 @@
 
 <script>
 export default {
+    name: 'TabelPeminjaman',
     props: {
-        loans: Array,
-    },
-};
+        peminjamanList: {
+            type: Array,
+            required: true,
+            default: () => []
+        }
+    }
+}
 </script>

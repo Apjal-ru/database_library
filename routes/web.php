@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\PeminjamanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,6 +31,10 @@ Route::delete('/books/{id}', [BookController::class, 'destroy'])->middleware('au
 Route::get('/peminjaman', function () {
     return view('peminjaman');
 })->middleware(['auth', 'role:user']);
+
+Route::middleware('auth')->group(function () {
+    Route::post('/api/peminjaman', [PeminjamanController::class, 'store']);
+});
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();

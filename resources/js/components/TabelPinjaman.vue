@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2 class="text-2xl font-bold mb-4">List Pinjaman</h2>
+        <h2 class="text-2xl font-bold mb-4">Buku Yang Kamu Pinjam</h2>
         <table class="table table-striped">
             <thead>
                 <tr>

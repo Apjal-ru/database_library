@@ -8,10 +8,10 @@
     <h1 class="text-4xl font-semibold text-center my-4">Peminjaman Buku</h1>
     <div class="flex flex-col justify-center">
         <div class="container p-4 bg-white py-4 rounded-xl shadow-md">
-                <form-peminjaman @form-submitted="addPeminjaman" />
+                <FormPeminjaman @form-submitted="addPeminjaman" />
         </div>
         <div class="container p-4 bg-white py-4 rounded-xl shadow-md my-4">
-                <table-peminjaman :peminjamanList="peminjamanList" />
+                <TabelPinjaman :peminjamanList="peminjamanList" />
         </div>
     </div>
 </template>
@@ -23,7 +23,7 @@ import TabelPinjaman from './TabelPinjaman.vue';
 export default {
     components: {
         FormPeminjaman,
-        TabelPinjaman,
+        TabelPinjaman
     },
     data() {
         return {
@@ -33,12 +33,8 @@ export default {
         };
     },
     methods: {
-        addPeminjaman() {
-            if (this.bookForm.id) {
-                // Update book logic
-            } else {
-                // Add book logic
-            }
+        addPeminjaman(data) {
+            this.peminjamanList.push(data)
         },
         logout() {
             window.location.href = '/logout';

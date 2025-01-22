@@ -66,6 +66,7 @@ export default {
     },
     async created() {
         await this.fetchBooks();
+        await this.fetchLoans();
     },
     methods: {
         async fetchBooks() {
@@ -84,6 +85,25 @@ export default {
                 this.books = data.books;
             } catch (error) {
                 console.error('Error fetching books:', error);
+
+            }
+        },
+        async fetchLoans() {
+            try {
+                const response = await fetch('/api/peminjaman', {
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrf
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch loans');
+                }
+
+                const data = await response.json();
+                this.loans = data.loans;
+            } catch (error) {
+                console.error('Error fetching loans:', error);
 
             }
         },
@@ -205,8 +225,31 @@ export default {
                 alert('Gagal menghapus buku: ' + error.message);
             }
         },
-        deleteLoan(id) {
-            // Delete loan logic
+        async deleteLoan(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus peminjaman ini?')) {
+            return;
+        }
+
+        try {
+            fetch(`/api/peminjaman/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': this.csrf,
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.loans = this.loans.filter(loan => loan.id !== id);
+                        alert('Peminjaman berhasil dihapus');
+                    } else {
+                        throw new Error(data.message);
+                    }
+                });
+        } catch (error) {
+            console.error('Error deleting loan:', error);
+            alert('Gagal menghapus peminjaman: ' + error.message);
+        }
         },
         logout() {
             window.location.href = '/logout';

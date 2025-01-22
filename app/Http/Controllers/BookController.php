@@ -72,7 +72,7 @@ class BookController extends Controller
             // Cek duplikasi, exclude buku yang sedang diedit
             if ($this->checkDuplicate($validated['title'], $validated['publisher'], $validated['year'], $id)) {
                 return response()->json([
-                    'message' => 'Buku dengan judul, penerbit, dan tahun yang sama sudah ada'
+                    'message' => 'Sudah ada buku yang serupa'
                 ], 422);
             }
 
