@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataBuku;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -100,6 +101,14 @@ class BookController extends Controller
     {
         try {
             $book = DataBuku::findOrFail($id);
+
+            $peminjaman = Peminjaman::where('id', $id)->whereNull(columns: 'tanggal_peminjaman')->first();
+            if ($peminjaman) {
+                return response()->json([
+                    'message' => 'Buku sedang dipinjam, tidak dapat dihapus atau dikurangi stoknya.'
+                ], 422);
+            }
+
             $book->delete();
 
             return response()->json([

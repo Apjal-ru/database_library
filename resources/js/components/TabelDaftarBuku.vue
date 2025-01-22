@@ -43,6 +43,14 @@ export default {
             required: true,
             default: () => []
         }
+    },
+    methods: {
+        updateBookStock(updatedBook) {
+            const index = this.books.findIndex(book => book.id === updatedBook.id);
+            if (index !== -1) {
+                this.books[index].available_stock = updatedBook.available_stock;
+            }
+        }
     }
 };
 </script>

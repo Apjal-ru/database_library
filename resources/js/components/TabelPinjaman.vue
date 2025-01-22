@@ -32,6 +32,16 @@
 export default {
     props: {
         peminjamanList: Array,
+    },
+    methods: {
+        formatDate(date) {
+            if (!date) return '';
+            return new Date(date).toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
     }
 };
 </script>

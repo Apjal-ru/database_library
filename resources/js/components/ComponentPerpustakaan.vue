@@ -27,7 +27,7 @@
                     Tambah Buku
                 </button>
                 <AddBookModal :bookForm="bookForm" @save-book="addOrUpdateBook" />
-                <TabelDaftarBuku :books="books" @edit-book="editBook" @delete-book="deleteBook" />
+                <TabelDaftarBuku ref="booksComponent" :books="books" @edit-book="editBook" @delete-book="deleteBook" />
             </div>
 
             <div v-if="activeTab === 'loans'">
@@ -169,6 +169,23 @@ export default {
             } catch (error) {
                 console.error('Error:', error);
                 alert('Gagal menyimpan buku: ' + error.message);
+            }
+        },
+        async pinjamBuku(book, jumlah) {
+            try {
+                const response = await axios.post('/api/peminjaman', { id: book.id, jumlah });
+                if (response.data.success) {
+                    const updatedBook = response.data.peminjaman.book;
+
+
+                    const index = this.books.findIndex(b => b.id === updatedBook.id);
+                    if (index !== -1) {
+                        this.books[index] = updatedBook;
+                    }
+                    this.$refs.booksComponent.updateBookStock(updatedBook);
+                }
+            } catch (error) {
+                console.error(error);
             }
         },
         editBook(book) {
