@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\ExportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/api/peminjaman/{id}', [PeminjamanController::class, 'destroy']);
     Route::get('/logs', [LogController::class, 'getLogs']);
 });
+
+Route::get('/export-logs', [ExportController::class, 'export'])->name('export.logbook')->middleware(['auth', 'role:admin']);
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();

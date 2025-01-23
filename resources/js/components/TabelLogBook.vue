@@ -30,6 +30,9 @@
                 </tr>
             </tbody>
         </table>
+        <button class="btn btn-primary justify-content-end" @click="exportLog">
+            Export Log
+        </button>
     </div>
 </template>
 <script>
@@ -49,6 +52,9 @@ export default {
                 month: 'long',
                 day: 'numeric'
             });
+        },
+        exportLog() {
+            window.location.href = '/export-logs';
         }
     }
 };
