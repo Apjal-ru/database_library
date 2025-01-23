@@ -21,7 +21,7 @@
                     <td>{{ loan.penerbit_buku }}</td>
                     <td>{{ loan.jumlah }}</td>
                     <td>{{ loan.terbit }}</td>
-                    <td>{{ loan.tanggal_peminjaman }}</td>
+                    <td>{{ formatDate(loan.tanggal_peminjaman) }}</td>
                 </tr>
             </tbody>
         </table>

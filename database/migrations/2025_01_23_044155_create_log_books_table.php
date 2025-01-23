@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('peminjaman', function (Blueprint $table) {
+    Schema::create('log_books', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('id_buku');
         $table->string('nama_peminjam');
         $table->string('judul_buku');
-        $table->string('penerbit_buku');
-        $table->integer('jumlah');
-        $table->integer('terbit');
-        $table->string('tanggal_peminjaman');
+        $table->string('tanggal');
+        $table->enum('status', allowed: ['Meminjam', 'Mengembalikan']);
+        $table->unsignedBigInteger('peminjaman_id')->nullable();
         $table->timestamps();
     });
 }
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('peminjaman');
+        Schema::dropIfExists('log_books');
     }
 };

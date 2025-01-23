@@ -8,6 +8,7 @@ import TabelPeminjaman from './components/TabelPeminjaman.vue';
 import AddBookModal from './components/AddBookModal.vue';
 import FormPeminjaman from './components/FormPeminjaman.vue';
 import TabelPinjaman from './components/TabelPinjaman.vue';
+import TabelLogBook from './components/TabelLogBook.vue';
 
 const app = createApp({});
 app.component('login-component', LoginComponent);
@@ -18,5 +19,6 @@ app.component('add-book-modal', AddBookModal);
 app.component('component-peminjaman', ComponentPeminjaman);
 app.component('form-peminjaman', FormPeminjaman);
 app.component('tabel-pinjaman', TabelPinjaman);
+app.component('tabel-log-book', TabelLogBook);
 
 app.mount('#app');

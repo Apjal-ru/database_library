@@ -20,6 +20,11 @@
                         Peminjaman
                     </button>
                 </li>
+                <li class="nav-item">
+                    <button class="nav-link" :class="{ active: activeTab === 'logs' }" @click="activeTab = 'logs'">
+                        Log Book
+                    </button>
+                </li>
             </ul>
             <!-- Tab Content -->
             <div v-if="activeTab === 'books'">
@@ -33,6 +38,9 @@
             <div v-if="activeTab === 'loans'">
                 <TabelPeminjaman :peminjamanList="loans" @delete-loan="deleteLoan" />
             </div>
+            <div v-if="activeTab === 'logs'">
+                <TabelLogBook :logs="logs"/>
+            </div>
         </div>
     </div>
 </template>
@@ -40,6 +48,7 @@
 <script>
 import AddBookModal from './AddBookModal.vue';
 import TabelDaftarBuku from './TabelDaftarBuku.vue';
+import TabelLogBook from './TabelLogBook.vue';
 import TabelPeminjaman from './TabelPeminjaman.vue';
 
 export default {
@@ -47,7 +56,7 @@ export default {
         AddBookModal,
         TabelDaftarBuku,
         TabelPeminjaman,
-
+        TabelLogBook,
     },
     data() {
         return {
@@ -55,6 +64,7 @@ export default {
             activeTab: 'books',
             books: [],
             loans: [],
+            logs: [],
             bookForm: {
                 id: null,
                 amount: '',
@@ -68,6 +78,7 @@ export default {
     async created() {
         await this.fetchBooks();
         await this.fetchLoans();
+        await this.fetchLogs();
     },
     methods: {
         async fetchBooks() {
@@ -106,6 +117,21 @@ export default {
             } catch (error) {
                 console.error('Error fetching loans:', error);
 
+            }
+        },
+        async fetchLogs() {
+            try {
+                const response = await fetch('/api/logs', {
+                    headers: {
+                        'X-CSRF-TOKEN': this.csrf,
+                    },
+                });
+
+                if (!response.ok) throw new Error('Failed to fetch logs');
+                const data = await response.json();
+                this.logs = data.logs;
+            } catch (error) {
+                console.error('Error fetching logs:', error);
             }
         },
         async addOrUpdateBook() {
@@ -183,6 +209,8 @@ export default {
                         this.books[index] = updatedBook;
                     }
                     this.$refs.booksComponent.updateBookStock(updatedBook);
+
+                    await this.fetchLogs();
                 }
             } catch (error) {
                 console.error(error);

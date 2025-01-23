@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
 use App\Models\DataBuku;
+use App\Models\LogBook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PeminjamanController extends Controller
 {
+
     public function store(Request $request)
     {
         try {
@@ -41,6 +43,14 @@ class PeminjamanController extends Controller
             // Update stok buku
             $buku->update([
                 'available_stock' => $buku->available_stock - $validated['jumlah']
+            ]);
+
+            // Tambahkan log peminjaman
+            LogBook::create([
+                'nama_peminjam' => Auth::user()->username,
+                'judul_buku' => $buku->title,
+                'tanggal' => now()->toDateString(),
+                'status' => 'dipinjam',
             ]);
 
             return response()->json([
@@ -80,6 +90,14 @@ class PeminjamanController extends Controller
             if ($buku) {
                 $buku->update([
                     'available_stock' => $buku->available_stock + $peminjaman->jumlah
+                ]);
+
+                // Tambahkan log pengembalian
+                LogBook::create([
+                    'nama_peminjam' => $peminjaman->nama_peminjam,
+                    'judul_buku' => $peminjaman->judul_buku,
+                    'tanggal' => now()->toDateString(),
+                    'status' => 'dikembalikan',
                 ]);
             }
 

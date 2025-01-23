@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\LogController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,19 +24,19 @@ Route::get('/index', function () {
     return view('index');
 })->middleware(['auth', 'role:admin']);
 
-Route::post('/books', [BookController::class, 'store'])->middleware('auth');
-Route::put('/books/{id}', [BookController::class, 'update'])->middleware('auth');
-Route::delete('/books/{id}', [BookController::class, 'destroy'])->middleware('auth');
-
 // User route
 Route::get('/peminjaman', function () {
     return view('peminjaman');
 })->middleware(['auth', 'role:user']);
 
 Route::middleware('auth')->group(function () {
+    Route::post('/books', [BookController::class, 'store']);
+    Route::put('/books/{id}', [BookController::class, 'update']);
+    Route::delete('/books/{id}', [BookController::class, 'destroy']);
     Route::post('/api/peminjaman', [PeminjamanController::class, 'store']);
     Route::get('/api/peminjaman', [PeminjamanController::class, 'index']);
     Route::delete('/api/peminjaman/{id}', [PeminjamanController::class, 'destroy']);
+    Route::get('/logs', [LogController::class, 'getLogs']);
 });
 
 Route::post('/logout', function (Request $request) {
